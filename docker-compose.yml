@@ -1,0 +1,36 @@
+﻿version: '3.8'
+
+services:
+  rates-service:
+    build:
+      context: ./RatesService/RatesService.Api
+    ports:
+      - "5001:5001"
+    depends_on:
+      - rabbitmq
+      - postgres
+
+  positions-service:
+    build:
+      context: ./PositionsService/PositionsService.Api
+    ports:
+      - "5002:5002"
+    depends_on:
+      - rabbitmq
+      - postgres
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  postgres:
+    image: "postgres"
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
